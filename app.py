@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.efficientnet import preprocess_input
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['UPLOAD_FOLDER'] = './uploads/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Set max upload size to 16MB
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -18,7 +18,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('./templates/index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -32,7 +32,7 @@ def upload_file():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         prediction, predicted_class_name = predict_image(file_path)
-        return render_template('result.html', prediction=prediction, image_url=filename, predicted_class_name=predicted_class_name)
+        return render_template('./templates/result.html', prediction=prediction, image_url=filename, predicted_class_name=predicted_class_name)
 
 def predict_image(file_path):
     img = image.load_img(file_path, target_size=(224, 224))
