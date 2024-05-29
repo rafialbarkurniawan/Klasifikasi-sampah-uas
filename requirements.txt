@@ -1,0 +1,2 @@
+Flask
+tensorflow # Sesuaikan dengan versi TensorFlow yang digunakan\
