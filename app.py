@@ -7,7 +7,10 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.efficientnet import preprocess_input
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = './uploads/'
+
+# Menentukan direktori tempat gambar akan disimpan
+UPLOAD_FOLDER = os.path.abspath('./uploads/')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Set max upload size to 16MB
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -18,21 +21,33 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('./templates/index.html')
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
+        print("No file part")
         return redirect(request.url)
     file = request.files['file']
     if file.filename == '':
+        print("No selected file")
         return redirect(request.url)
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        prediction, predicted_class_name = predict_image(file_path)
-        return render_template('./templates/result.html', prediction=prediction, image_url=filename, predicted_class_name=predicted_class_name)
+        print(f"Saving file to: {file_path}")
+        try:
+            file.save(file_path)
+            print("File saved successfully")
+            prediction, predicted_class_name = predict_image(file_path)
+            return render_template('result.html', prediction=prediction, image_url=url_for('uploaded_file', filename=filename), predicted_class_name=predicted_class_name)
+        except Exception as e:
+            print(f"Error saving file: {e}")
+            return redirect(request.url)
+    else:
+        print("File type not allowed")
+        return redirect(request.url)
+
 
 def predict_image(file_path):
     img = image.load_img(file_path, target_size=(224, 224))
