@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import os
-from model_loader import model1, model2
+from model_loader import model
 import numpy as np
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.efficientnet import preprocess_input
@@ -28,23 +28,17 @@ def upload_file():
     if file.filename == '':
         return redirect(request.url)
     if file and allowed_file(file.filename):
-        model_choice = request.form['model_choice']
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-        prediction, predicted_class_name = predict_image(file_path, model_choice)
-        return render_template('result.html', prediction=prediction, image_url=filename, model_choice=model_choice, predicted_class_name=predicted_class_name)
+        prediction, predicted_class_name = predict_image(file_path)
+        return render_template('result.html', prediction=prediction, image_url=filename, predicted_class_name=predicted_class_name)
 
-def predict_image(file_path, model_choice):
+def predict_image(file_path):
     img = image.load_img(file_path, target_size=(224, 224))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = preprocess_input(img_array)
-    
-    if model_choice == 'model1':
-        model = model1
-    else:
-        model = model2
 
     prediction = model.predict(img_array)
     predicted_class_index = np.argmax(prediction, axis=1)[0]
