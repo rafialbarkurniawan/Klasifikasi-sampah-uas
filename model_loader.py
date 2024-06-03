@@ -5,4 +5,4 @@ def load_model(model_path):
     return model
 
 # Memuat model
-model = load_model('model/efficiennetB1.h5')
+model = load_model('./model/efficiennetB1.h5')

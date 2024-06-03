@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
-import os
 from model_loader import model
-import numpy as np
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.efficientnet import preprocess_input
+import numpy as np
+import os
 
 app = Flask(__name__)
 
@@ -57,7 +57,7 @@ def predict_image(file_path):
 
     prediction = model.predict(img_array)
     predicted_class_index = np.argmax(prediction, axis=1)[0]
-    class_names = {'BotolKaca': 0, 'BotolPlastik': 1, 'GelasDisposable': 2, 'Kaleng': 3, 'Kardus': 4, 'WadahKaca': 5}
+    class_names = {'Botol Kaca': 0, 'Botol Plastik': 1, 'Gelas Disposable': 2, 'Kaleng': 3, 'Kardus': 4, 'Wadah Kaca': 5}
     predicted_class_name = [name for name, index in class_names.items() if index == predicted_class_index][0]
     return prediction, predicted_class_name
 

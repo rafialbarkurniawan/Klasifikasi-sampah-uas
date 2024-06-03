@@ -5,18 +5,14 @@
     <title>Classification Result</title>
     <link
       rel="stylesheet"
-      href="../static/style.css"
+      href="/static/style.css"
     />
   </head>
   <body>
     <div class="container">
       <h1>Classification Result</h1>
-      <img
-        src="{{ url_for('uploaded_file', filename=image_url.split('/')[-1]) }}"
-        alt="Uploaded Image"
-      />
-      <p>Predicted Class: {{ predicted_class_name }}</p>
-      <a href="../templates/index.html">Upload Another Image</a>
+      <img src="{{ image_url }}" alt="Uploaded Image" />
+      <p>Predicted Class: {{ predicted_class_name }}</p>z
     </div>
   </body>
 </html>
