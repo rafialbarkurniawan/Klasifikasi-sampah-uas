@@ -1,0 +1,112 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 250vh;
+    background-color: #365E32;
+    color: white;
+    background-size: cover;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding-bottom: 50px;
+    color: white;
+    font-weight: bold;
+}
+h2 {
+    text-align: center;
+    margin: 0;
+    padding-bottom: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Added CSS for map container */
+#map-container {
+    width: 100%;
+    margin-top: 30px;
+}
+
+#map {
+    height: 600px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 300px;
+    border-radius: 8px;
+    margin: 20px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    color: white;
+    
+    border-style: none;
+    border-radius: 5px;
+    
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    background-color: white;
+}
+
+p {
+    font-size: 18px;
+}
+
+/* Added CSS for result info */
+.result-info {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.result-info img {
+    max-width: 50%;
+    margin-right: 20px;
+}
+
+.result-info .description {
+    flex-grow: 1;
+    background-color: #365E32;
+    border: 1px solid #D8EFD3;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left; /* Align text to the left */
+}
+
+.result-info .description p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+
