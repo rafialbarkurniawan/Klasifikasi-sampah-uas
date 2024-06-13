@@ -1,19 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+    <!--fix<link href="style.css" rel="stylesheet">-->
+
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" id="leaflet-css">
     <title>Classification Result</title>
-    <link
-      rel="stylesheet"
-      href="../static/style.css"
-    />
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <h1>Classification Result</h1>
-      <img src="{{ image_url }}" alt="Uploaded Image" />
-      <p>Predicted Class: {{ predicted_class_name }}</p>
-      <a href="{{ url_for('index') }}">Upload Another Image</a>
+        <h1>Classification Result</h1>
+        <div class="result-info">
+            <img src="{{ image_url }}" alt="Uploaded Image" />
+            <div class="description">
+                <p>Ini adalah sampah <strong>{{ predicted_class_name }}</strong></p>
+                {% if predicted_class_name == "Botol Kaca" %}
+                <p>Botol kaca merupakan jenis sampah yang terbuat dari bahan kaca, yang biasanya digunakan untuk minuman atau penyimpanan. 
+                    <br>Botol kaca dapat didaur ulang dengan membersihkannya dari sisa-sisa cairan dan kemudian memasukkannya ke dalam proses daur ulang kaca. 
+                    Kaca yang didaur ulang kemudian dapat digunakan kembali untuk membuat botol atau barang kaca lainnya.</p>
+                {% elif predicted_class_name == "Botol Plastik" %}
+                <p>Botol plastik adalah wadah berbentuk botol yang terbuat dari plastik, yang umumnya digunakan untuk minuman dan produk-produk konsumen lainnya. 
+                    <br>Botol plastik dapat didaur ulang dengan mengumpulkannya, membersihkannya, dan memasukkannya ke dalam proses daur ulang plastik. 
+                    Plastik yang didaur ulang kemudian dapat digunakan kembali untuk membuat botol baru atau produk plastik lainnya.</p>
+                {% elif predicted_class_name == "Gelas Disposable" %}
+                <p>Gelas disposable adalah gelas sekali pakai yang biasanya terbuat dari plastik atau kertas, dan digunakan untuk minuman atau makanan yang dikonsumsi secara sementara. 
+                    <br>Gelas disposable dapat didaur ulang tergantung bahan pembuatannya. Jika terbuat dari plastik, proses daur ulang serupa dengan botol plastik. 
+                    Jika terbuat dari kertas, dapat didaur ulang sebagai kertas daur ulang.</p>
+                {% elif predicted_class_name == "Kaleng" %}
+                <p>Kaleng adalah wadah logam yang biasanya digunakan untuk minuman, makanan kalengan, atau produk-produk lainnya. 
+                    <br>Kaleng dapat didaur ulang dengan mengumpulkannya dan memasukkannya ke dalam proses daur ulang logam. 
+                    Logam yang didaur ulang kemudian dapat digunakan kembali untuk membuat kaleng baru atau produk logam lainnya.</p>
+                {% elif predicted_class_name == "Kardus" %}
+                <p>Kardus adalah bahan kemasan yang terbuat dari bahan serat alami atau campuran serat alami dan sintetis, yang digunakan untuk kemasan dan pembungkus. 
+                    <br>Kardus dapat didaur ulang dengan menghancurkannya menjadi serat, kemudian memasukkannya ke dalam proses pembuatan kertas daur ulang. 
+                    Kertas daur ulang tersebut dapat digunakan kembali untuk membuat kardus baru atau produk kertas lainnya.</p>
+                {% elif predicted_class_name == "Wadah Kaca" %}
+                <p>Wadah kaca adalah wadah atau kontainer yang terbuat dari kaca, yang digunakan untuk menyimpan makanan, minuman, atau produk-produk lainnya. 
+                    <br>Wadah kaca dapat didaur ulang dengan membersihkannya dari sisa-sisa makanan atau minuman, kemudian memasukkannya ke dalam proses daur ulang kaca. 
+                    Kaca yang didaur ulang kemudian dapat digunakan kembali untuk membuat wadah kaca baru atau produk kaca lainnya.</p>
+                {% endif %}
+                <p>Dengan mendaur ulang sampah-sampah ini, kita dapat mengurangi jumlah limbah yang masuk ke tempat pembuangan akhir dan membantu menjaga lingkungan tetap bersih dan sehat.</p>
+                <a href="{{ url_for('index') }}" style="margin-top: 20px;background-color: #134611; color: white;
+                height: 60px;
+                width: 200px;
+                border-style: none;
+                border-radius: 5px;
+                padding-top: 18px;
+                text-align: center;
+                display: inline-block;
+                text-decoration: none;">BACK</a>
+            </div>
+        </div>
+        
+        <!-- Add a div for the map -->
+        <div id="map-container">
+            <h2>Lokasi Bank Sampah Terdekat, Karawang</h2>
+            <div id="map"></div>
+        </div>
+        
     </div>
-  </body>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Initialize Leaflet map
+    var map = L.map('map').setView([-6.2820747,107.2493466], 13); // Set the initial view to Kabupaten Karawang
+
+    // Add OpenStreetMap tile layer to the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Function to open Google Maps with specific coordinates
+    function openLink(lat, lng) {
+        window.open("https://www.google.com/maps?q=" + lat + "," + lng);
+    }
+
+    // Add markers for waste disposal locations
+    var wasteLocations = [
+        {name: 'Bank Sampah Adiarsa Barat', location: [-6.3132728,107.2521618], url: 'https://maps.app.goo.gl/hgAL6ydLctX5inwB7'},
+        {name: 'TPS Pasar Johar', location: [-6.3117363,107.2842287], url: 'https://maps.app.goo.gl/3PagpRbTQixzaMrCA'},
+        {name: 'BANK SAMPAH KINASIH MANDIRI', location: [-6.2817255,107.2709302], url: 'https://maps.app.goo.gl/DuKzPUap76vX4AbQ6'},
+        {name: 'BANK SAMPAH SAUNG HIJAU', location: [-6.320818,107.2731115], url: 'https://maps.app.goo.gl/39R15PNJaEVYHGgDA'},
+        {name: 'Gedung sampah', location: [-6.3227471,107.3023225], url: 'https://maps.app.goo.gl/ahyWpi9oUfVUUkyg8'},
+        {name: 'Bank sampah unit Pura Bestari', location: [-6.2882253,107.2828983], url: 'https://maps.app.goo.gl/Dq5paygCivjDvi229'},
+        {name: 'TPS3R PINAYUNGAN', location: [-6.3461391,107.3055915], url: 'https://maps.app.goo.gl/cHzPe2RGrKBqA9yM6'},
+        {name: 'Bank Sampah Cipta Usaha Mandiri', location: [-6.2641528,107.3260942], url: 'https://maps.app.goo.gl/3J1z1mTRAhjhgpm18'},
+        {name: 'TPST RDF KARAWANG', location: [-6.1161221,107.3065463], url: 'https://maps.app.goo.gl/cxXzUZmbUFfhEC2k8'},
+        {name: 'Bank Sampah Dahlia 9', location: [-6.3214049,107.2707949], url: 'https://maps.app.goo.gl/An2VWuQugGd26k7S6'},
+        {name: 'Eco Housing TPST 3R Bank Sampah CKM', location: [-6.2819008,107.2493465], url: 'https://maps.app.goo.gl/DooQ84iEDC9LMRon6'},
+        {name: 'TPSS Yanten', location: [-6.302973269160906, 107.29655340921646], url: 'https://maps.app.goo.gl/NmUkB91aVv4RBoZq6'},
+        {name: 'TPS 3R Bambu Raya', location: [-6.32574766153983, 107.3334854223817], url: 'https://maps.app.goo.gl/GgJWhKAdbytaWmSQ8'},
+        {name: 'bank sampah RW 06 perum indo alam residence', location: [-6.269660041337169, 107.33679175904936], url: 'https://maps.app.goo.gl/TysFqHuX3w8avsGE9'},
+        {name: 'TPSS Pasirjengkol', location: [-6.283682514035671, 107.28940093347967], url: 'https://maps.app.goo.gl/Q77oechuaZxYWfSk8'},
+        {name: 'TPS 3R Baraya Runtah (KSM Sahabat Lingkungan)', location: [-6.33010632711033, 107.28640703878224], url: 'https://maps.app.goo.gl/d7hMDdoSD3hjVEBM7'},
+        {name: 'TPS 3R PELITA ADIARSA TIMUR', location: [-6.31065587618172, 107.33103899537937], url: 'https://maps.app.goo.gl/oAdFQ3qMJcvVLc9G6'},
+        {name: 'BANK SAMPAH BERSINAR BLOK F', location: [-6.3294238675341985, 107.28331713409474], url: 'https://maps.app.goo.gl/nWDxJCHbTMVUGrRV7'},
+        {name: 'Bank Sampah Latanza', location: [-6.387867357791828, 107.44865863624108], url: 'https://maps.app.goo.gl/uQk53zy3CT2srgDL8'},
+        {name: 'TPST Mekarjati', location: [-6.251682838603128, 107.28679755898409], url: 'https://maps.app.goo.gl/W9TsP7SrqnXCRWwX9'},
+        ];
+
+    wasteLocations.forEach(function(location) {
+        L.marker(location.location).addTo(map)
+            .bindPopup('<a href="' + location.url + '" target="_blank">' + location.name + '</a>');
+    });
+</script>
+
+  
+</body>
 </html>
