@@ -1,48 +1,111 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
     margin: 0;
     padding: 0;
+    height: 100vh;
+    background-color: #365E32;
+    color: white;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
-    width: 50%;
-    margin: 0 auto;
-    padding: 20px;
     text-align: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
 h1 {
-    color: #333;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 0px;
+    color: white;
+    font-weight: bold;
 }
 
-form {
-    margin-top: 20px;
+.background-image {
+    width: 100%; /* or max-width: 100%; if you want to ensure it doesn't stretch */
+    max-width: 400px; /* Set max-width to 400px */
+    height: auto;
+    display: block;
+    margin: 20px auto; /* Center the image */
 }
 
 input[type="file"] {
-    margin: 10px 0;
+    display: none;
 }
 
-input[type="submit"] {
-    background-color: #4CAF50;
+#file-label {
     color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
+    height: 60px;
+    width: 200px;
+    background-color: #134611;
+    border-style: none;
+    border-radius: 5px;
+    padding-top: 18px;
+    text-align: center;
+    display: inline-block;
 }
 
-input[type="submit"]:hover {
-    background-color: #45a049;
+#file-label:hover {
+    color: #134611;
+    background-color: white;
 }
 
-img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
+#submit-label {
+    color: white;
+    height: 60px;
+    width: 300px;
+    background-color: transparent;
+    border-style: solid;
+    border-color: #D8EFD3;
+    border-radius: 5px;
+    padding-top: 18px;
+    text-align: center;
+    pointer-events: none; /* Disable pointer events by default */
+}
+
+#submit-label:hover {
+    color: #134611;
+    background-color: white;
+    border-style: none;
+}
+
+#file-name {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+a {
+    color: white;
+    height: 60px;
+    width: 200px;
+    background-color: #134611;
+    border-style: none;
+    border-radius: 5px;
+    padding-top: 18px;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #134611;
+    background-color: white;
 }
 
 p {
-    font-size: 1.2em;
-    color: #555;
+    font-size: 18px;
 }
